@@ -1,0 +1,442 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>SAP package &#8212; SAP 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="sap-package">
+<h1>SAP package<a class="headerlink" href="#sap-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-SAP.data_import">
+<span id="sap-data-import-module"></span><h2>SAP.data_import module<a class="headerlink" href="#module-SAP.data_import" title="Permalink to this headline">¶</a></h2>
+<p>This module contains functions to deliver the data as requested.</p>
+<dl class="function">
+<dt id="SAP.data_import.get_C_MAPSS_Data">
+<code class="descclassname">SAP.data_import.</code><code class="descname">get_C_MAPSS_Data</code><span class="sig-paren">(</span><em>path</em>, <em>dataset</em><span class="sig-paren">)</span><a class="headerlink" href="#SAP.data_import.get_C_MAPSS_Data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get turbofan engine C_MAPSS data for modeling purpose</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> (<em>string</em>) – data directory path relative to working file</li>
+<li><strong>dataset</strong> (<em>string</em>) – selected dataset from four datasets</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">tuple (training data, testing data, RUL of test data)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-SAP.model">
+<span id="sap-model-module"></span><h2>SAP.model module<a class="headerlink" href="#module-SAP.model" title="Permalink to this headline">¶</a></h2>
+<p>This module contains functionalities of modeling and evaluation of LSTM models that are designed to estimate remaining
+useful life of turbofan engine data.</p>
+<dl class="function">
+<dt id="SAP.model.Evaluate_Model">
+<code class="descclassname">SAP.model.</code><code class="descname">Evaluate_Model</code><span class="sig-paren">(</span><em>Xtesting</em>, <em>Ytesting</em>, <em>engines</em>, <em>model</em>, <em>all_in_one</em>, <em>engines_to_check</em><span class="sig-paren">)</span><a class="headerlink" href="#SAP.model.Evaluate_Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function evaluate the trained model on the test data for specified engines</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>Xtesting</strong> (<em>numpy array</em>) – test input data</li>
+<li><strong>Ytesting</strong> (<em>numpy array</em>) – test label data</li>
+<li><strong>engines</strong> (<em>numpy array</em><em> or </em><em>list</em>) – array/list of engines that are collected in test data</li>
+<li><strong>model</strong> (<em>Keras Model Sequential</em>) – trained model</li>
+<li><strong>all_in_one</strong> (<em>boolean</em><em> (</em><em>True/False</em><em>)</em>) – whether test data to be prepared separately for every engine or combined; separate option is better as it provides ease to understand the model evaluation results; combined option is not available</li>
+<li><strong>engines_to_check</strong> (<em>list</em>) – list of test engines that are tested on trained model</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">tuple (prediction, real, engines_to_check)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SAP.model.LSTM_for_RUL">
+<code class="descclassname">SAP.model.</code><code class="descname">LSTM_for_RUL</code><span class="sig-paren">(</span><em>X</em>, <em>centering</em>, <em>normalization</em>, <em>dt</em>, <em>load_XYtraining_data</em>, <em>model_parameters</em>, <em>import_trained_model</em>, <em>plot_training_history</em><span class="sig-paren">)</span><a class="headerlink" href="#SAP.model.LSTM_for_RUL" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function first prepare the training data for modeling. For modeling, it accepts model architecture.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>Pandas Dataframe</em>) – Training dataframe; each row corresponds to an engine at specific cycle and its operational parameters and sensors measurements at that cycle</li>
+<li><strong>centering</strong> (<em>boolean</em><em> (</em><em>True/False</em><em>)</em>) – <ul>
+<li>option to select whether input data to be min-max normalized and centered for better learning</li>
+</ul>
+</li>
+<li><strong>normalization</strong> (<em>boolean</em><em> (</em><em>True/False</em><em>)</em>) – option to select whether output label data to be normalized</li>
+<li><strong>dt</strong> (<em>integer</em><em> (</em><em>e.g. 10</em><em>,</em><em>20</em><em>,</em><em>30 etc...</em><em>)</em>) – span of cycles as a single input to be learn by the model</li>
+<li><strong>load_XYtraining_data</strong> (<em>boolean</em><em> (</em><em>True/False</em><em>)</em>) – option to select whether to load already prepared training data that are available only for dt = 10, 20, 30, 40, 50</li>
+<li><strong>model_parameters</strong> (<em>dictionary</em>) – neural network architecture parameters</li>
+<li><strong>import_trained_model</strong> (<em>Keras Model Sequential</em>) – Keras trained model</li>
+<li><strong>plot_training_history</strong> (<em>boolean</em><em> (</em><em>True/False</em><em>)</em>) – whether to plot model training error per epoch</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">tuple (training data dataframe, training input data, training label data, operational features, sensors features, cycle features, centering (True/False), normalization (True/False))</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SAP.model.Prepare_TestData">
+<code class="descclassname">SAP.model.</code><code class="descname">Prepare_TestData</code><span class="sig-paren">(</span><em>X</em>, <em>testing_RUL</em>, <em>settings_min_max_mean</em>, <em>sensors_min_max_mean</em>, <em>time_of_event_max</em>, <em>centering</em>, <em>normalization</em>, <em>dt</em>, <em>all_in_one</em><span class="sig-paren">)</span><a class="headerlink" href="#SAP.model.Prepare_TestData" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function prepares the testing data for model evaluation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>Pandas Dataframe</em>) – Test dataframe; each row corresponds to an engine at specific cycle and its operational parameters and sensors measurements at that cycle</li>
+<li><strong>testing_RUL</strong> (<em>Pandas Dataframe</em>) – remaining useful life for every engine (at the end of cycle) in the test data</li>
+<li><strong>settings_min_max_mean</strong> (<em>dictionary</em>) – operational settings features</li>
+<li><strong>sensors_min_max_mean</strong> (<em>dictionary</em>) – sensor meaturements features</li>
+<li><strong>time_of_event_max</strong> (<em>float</em>) – maximum value of cycle from any engine in training data</li>
+<li><strong>centering</strong> (<em>boolean</em><em> (</em><em>True/False</em><em>)</em>) – <ul>
+<li>whether input data is min-max normalized and centered for better learning</li>
+</ul>
+</li>
+<li><strong>normalization</strong> (<em>boolean</em><em> (</em><em>True/False</em><em>)</em>) – whether output label data is normalized</li>
+<li><strong>dt</strong> (<em>integer</em><em> (</em><em>e.g. 10</em><em>,</em><em>20</em><em>,</em><em>30 etc...</em><em>)</em>) – span of cycles as a single input to be learn by the model</li>
+<li><strong>all_in_one</strong> (<em>boolean</em><em> (</em><em>True/False</em><em>)</em>) – whether test data to be prepared separately for every engine or combined; separate option is better as it provides ease to understand the model evaluation results</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">tuple (Test input data, Test true label data, engines label for test input data, all_in_one to be used in any following functions)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SAP.model.iNormalization">
+<code class="descclassname">SAP.model.</code><code class="descname">iNormalization</code><span class="sig-paren">(</span><em>prediction</em>, <em>real</em>, <em>normalization</em>, <em>time_of_event_max</em><span class="sig-paren">)</span><a class="headerlink" href="#SAP.model.iNormalization" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function inverse the normalization on test labels</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>prediction</strong> (<em>numpy array</em>) – RUL prediction on test data</li>
+<li><strong>real</strong> (<em>numpy array</em>) – real RUL provided for test data</li>
+<li><strong>normalization</strong> (<em>boolean</em><em> (</em><em>True/False</em><em>)</em>) – whether output label data is normalized</li>
+<li><strong>time_of_event_max</strong> (<em>float</em>) – maximum value of cycle from any engine in training data</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">tuple (prediction, real) after inverse of normalization if present</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SAP.model.training_data_to_testing">
+<code class="descclassname">SAP.model.</code><code class="descname">training_data_to_testing</code><span class="sig-paren">(</span><em>data_testing</em>, <em>dt</em>, <em>load_training_to_testing_data</em><span class="sig-paren">)</span><a class="headerlink" href="#SAP.model.training_data_to_testing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Training data can be used as test data and here we performs this function</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data_testing</strong> (<em>Pandas Dataframe</em>) – training data dataframe that was used to generate train data from modeling</li>
+<li><strong>dt</strong> (<em>integer</em><em> (</em><em>e.g. 10</em><em>,</em><em>20</em><em>,</em><em>30 etc...</em><em>)</em>) – span of cycles as a single input to be learn by the model</li>
+<li><strong>load_training_to_testing_data</strong> (<em>boolean</em><em> (</em><em>True/False</em><em>)</em>) – whether to load the training data in evaluation data format</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">tuple (test input data, test output labels, engine labels)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-SAP.utils">
+<span id="sap-utils-module"></span><h2>SAP.utils module<a class="headerlink" href="#module-SAP.utils" title="Permalink to this headline">¶</a></h2>
+<p>This mododules provides utility functions</p>
+<dl class="function">
+<dt id="SAP.utils.TimeOfEvent">
+<code class="descclassname">SAP.utils.</code><code class="descname">TimeOfEvent</code><span class="sig-paren">(</span><em>X</em>, <em>machine=None</em>, <em>time_col=None</em><span class="sig-paren">)</span><a class="headerlink" href="#SAP.utils.TimeOfEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Observing the number of cycles for particular machine, create a time-of-event column for the machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>Pandas Dataframe</em>) – Dataframe that contains the current time as cycle</li>
+<li><strong>machine</strong> (<em>string</em>) – Name of column in which unique value will carry a value of Time of Event</li>
+<li><strong>time_col</strong> (<em>string</em>) – Names of the time series columns in which you want the function to process</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">modified dataframe with time of event</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SAP.utils.TimeToEvent">
+<code class="descclassname">SAP.utils.</code><code class="descname">TimeToEvent</code><span class="sig-paren">(</span><em>X</em>, <em>time_col=None</em>, <em>event_col=None</em>, <em>dropTargetNaN=None</em><span class="sig-paren">)</span><a class="headerlink" href="#SAP.utils.TimeToEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Using the current time and the time of event, create a time-to-event column as training label</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>Pandas Dataframe</em>) – Dataframe that contains the event time and current time as cycle</li>
+<li><strong>time_col</strong> (<em>string</em>) – Name of the time series columns in which you want the function to process</li>
+<li><strong>event_col</strong> (<em>string</em>) – Name of the time of event column that is used to process time-to-event</li>
+<li><strong>dropTargetNaN</strong> (<em>boolean</em><em> (</em><em>True/False</em><em>)</em>) – Flag to identify weather or not target variable NaN rows are dropped from the dataframe</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">modified dataframe with time of event converted to time to event</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SAP.utils.biplot">
+<code class="descclassname">SAP.utils.</code><code class="descname">biplot</code><span class="sig-paren">(</span><em>score</em>, <em>coeff</em>, <em>PCnum</em>, <em>subplot_num</em><span class="sig-paren">)</span><a class="headerlink" href="#SAP.utils.biplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>biplot of scores in principal component space</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>score</strong> (<em>numpy array</em>) – scores of datapoints in PC space</li>
+<li><strong>coeff</strong> (<em>numpy array</em>) – projection coefficients of original features along principal components</li>
+<li><strong>PCnum</strong> (<em>list</em>) – principal components for X and Y axis</li>
+<li><strong>subplot_num</strong> (<em>integer</em>) – subplot number</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SAP.utils.dataframe">
+<code class="descclassname">SAP.utils.</code><code class="descname">dataframe</code><span class="sig-paren">(</span><em>df</em><span class="sig-paren">)</span><a class="headerlink" href="#SAP.utils.dataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>data frame properties</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>df</strong> (<em>Pandas Dataframe</em>) – dataframe with columns as features and rows as samples</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SAP.utils.pca">
+<code class="descclassname">SAP.utils.</code><code class="descname">pca</code><span class="sig-paren">(</span><em>df</em>, <em>cols</em><span class="sig-paren">)</span><a class="headerlink" href="#SAP.utils.pca" title="Permalink to this definition">¶</a></dt>
+<dd><p>principal component analysis and biplot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>df</strong> (<em>Pandas Dataframe</em>) – dataframe with columns as features and rows as samples</li>
+<li><strong>cols</strong> (<em>list</em>) – list of column variable in df to be analyzed</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SAP.utils.plot_RUL">
+<code class="descclassname">SAP.utils.</code><code class="descname">plot_RUL</code><span class="sig-paren">(</span><em>engine</em>, <em>X</em>, <em>engines_to_check</em>, <em>prediction</em>, <em>real</em>, <em>RULtraining</em>, <em>dt</em><span class="sig-paren">)</span><a class="headerlink" href="#SAP.utils.plot_RUL" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot the remaining useful life (RUL): true, predicted and average</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>engine</strong> (<em>integer</em>) – engine id</li>
+<li><strong>X</strong> (<em>Pandas Dataframe</em>) – Dataframe that contains engine id and cycle</li>
+<li><strong>engines_to_check</strong> (<em>list</em>) – list of engine ids to generate the test results</li>
+<li><strong>prediction</strong> (<em>list</em>) – list of RUL predictions for every engine id listed in engines_to_check</li>
+<li><strong>real</strong> (<em>list</em>) – list of actual RUL for every engine id listed in engines_to_check</li>
+<li><strong>RULtraining</strong> (<em>list</em>) – list of RUL of all engine ids from training data</li>
+<li><strong>dt</strong> (<em>integer</em><em> (</em><em>e.g. 10</em><em>,</em><em>20</em><em>,</em><em>30 etc...</em><em>)</em>) – span of cycles as a single input to be learn by the model</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SAP.utils.single_plot">
+<code class="descclassname">SAP.utils.</code><code class="descname">single_plot</code><span class="sig-paren">(</span><em>xdata</em>, <em>ydata</em>, <em>xlabel</em>, <em>ylabel</em><span class="sig-paren">)</span><a class="headerlink" href="#SAP.utils.single_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot the x and y label data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>xdata</strong> (<em>numpy array</em>) – x-axis data</li>
+<li><strong>ydata</strong> (<em>numpy array</em>) – y-axis data</li>
+<li><strong>xlabel</strong> (<em>str</em>) – x-axis label</li>
+<li><strong>ylabel</strong> (<em>str</em>) – y-axis label</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SAP.utils.stats_boxplot">
+<code class="descclassname">SAP.utils.</code><code class="descname">stats_boxplot</code><span class="sig-paren">(</span><em>df</em><span class="sig-paren">)</span><a class="headerlink" href="#SAP.utils.stats_boxplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>boxplot of each column variable in dataframe</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>df</strong> (<em>Pandas Dataframe</em>) – dataframe with columns as features and rows as samples</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SAP.utils.stats_histogram">
+<code class="descclassname">SAP.utils.</code><code class="descname">stats_histogram</code><span class="sig-paren">(</span><em>df</em>, <em>c</em><span class="sig-paren">)</span><a class="headerlink" href="#SAP.utils.stats_histogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot histogram for every column of dataframe</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>df</strong> (<em>Pandas Dataframe</em>) – dataframe with columns as features and rows as samples</li>
+<li><strong>c</strong> (<em>integer</em>) – maximum number of histogram plots in any single row</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-SAP">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-SAP" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">SAP</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Manoj Kumar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/SAP.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
