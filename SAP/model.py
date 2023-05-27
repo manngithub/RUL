@@ -65,7 +65,7 @@ def LSTM_for_RUL(X,
     # centering - columns of settings and sensors measurements are min-max normalized and centered
     settings_min_max_mean, sensors_min_max_mean = [], []
     if centering:
-        print '[Info] Centering the settings and sensors measurements...'
+        print('[Info] Centering the settings and sensors measurements...')
         # centering for settings columns
         settings = ['setting1','setting2','setting3']
         sensors = ['s%s'%i for i in range(1,22)]
@@ -84,14 +84,14 @@ def LSTM_for_RUL(X,
         for sensor in sensors:
             data_training[sensor] = (X[sensor] - sensors_mean[sensor])/(sensors_max[sensor] - sensors_min[sensor])
         # sensors box plot
-        print '[Info] Box plot of column variables:'
+        print('[Info] Box plot of column variables:')
         stats_boxplot(df = data_training[sensors])
         
         
     # normalization - column of output label 'time_to_event' is normalized
     time_of_event_max = []
     if normalization:
-        print '[Info] Normalizing the remaining useful life at given cycle...'
+        print('[Info] Normalizing the remaining useful life at given cycle...')
         time_of_event_max = X['time_of_event'].max()
         data_training['time_to_event'] = X['time_to_event']/time_of_event_max
     
@@ -102,7 +102,7 @@ def LSTM_for_RUL(X,
         Xtraining = np.load(select+'/Data/Xtraining_data_dt_'+str(dt)+'.npy')   
         Ytraining = np.load(select+'/Data/Ytraining_data_dt_'+str(dt)+'.npy')
     else:
-        print '[Info] Preparing the input and output label data for model training...'
+        print('[Info] Preparing the input and output label data for model training...')
         Xtraining, Ytraining = [], []
         for engine in data_training['engine_id'].unique():
             cycle_max = data_training[data_training['engine_id'] == engine]['cycle'].max()
@@ -121,7 +121,7 @@ def LSTM_for_RUL(X,
         model_path = select+'/Data/model_dt_'+str(dt)+'.h5'
         model = load_model(model_path)
     else:
-        print '[Info] Model architecture defined...'
+        print('[Info] Model architecture defined...')
         # Design RNN Model Architecture
         lstm_layers = model_parameters['LSTM'] # number of LSTM layers and nodes in each layer
         ffnn_layers = model_parameters['FFNN'] # number of feed-forward neural network layers and nodes in each layer
@@ -139,13 +139,13 @@ def LSTM_for_RUL(X,
             model.add(Dense(ffnn_layers[i]))
         # network compilation
         model.compile(loss='mae',optimizer='adam')
-        print '[Info] Model training in progress...'
+        print('[Info] Model training in progress...')
         # model training
         model.fit(Xtraining,Ytraining,epochs=model_parameters['epoch'],batch_size=model_parameters['batch_size'],verbose = model_parameters['verbose'])
     
     # plot model training error
     if plot_training_history:
-        print '[Info] Plot of model training error:'
+        print('[Info] Plot of model training error:')
         if import_trained_model:
             select, ignore = os.path.split(os.path.abspath(__file__))
             csv_file = select+'/Data/mae_loss_dt_'+str(dt)+'.csv'
@@ -202,7 +202,7 @@ def Prepare_TestData(X, testing_RUL, settings_min_max_mean,
     data_testing = X.copy()
     
     if centering:
-        print '[Info] Centering the input test data...'
+        print('[Info] Centering the input test data...')
         # centering for settings columns
         settings = ['setting1','setting2','setting3']
         settings_min = settings_min_max_mean['min']
@@ -220,7 +220,7 @@ def Prepare_TestData(X, testing_RUL, settings_min_max_mean,
             data_testing[sensor] = (X[sensor] - sensors_mean[sensor])/(sensors_max[sensor] - sensors_min[sensor])
     
     if normalization:
-        print '[Info] Normalizing the remaining useful life of test data...'
+        print('[Info] Normalizing the remaining useful life of test data...')
         data_testing['time_to_event'] = X['time_to_event']/time_of_event_max
     
     # prepare testing data - 'X' signifies input data and 'Y' signifies output label data
@@ -239,7 +239,7 @@ def Prepare_TestData(X, testing_RUL, settings_min_max_mean,
         Ytesting = np.array(Ytesting)
         engines = np.arrary(engines)
     else: # assimilate test data for every engine_id. This option will help while evaluating RUL for specific engine_id
-        print '[Info] Assimilating test data for every engine...'
+        print('[Info] Assimilating test data for every engine...')
         Xtesting, Ytesting, engines = [], [], []
         for engine in data_testing['engine_id'].unique():
             Xtest_engine, Ytest_engine = [], []
@@ -287,7 +287,7 @@ def Evaluate_Model(Xtesting, Ytesting, engines, model, all_in_one, engines_to_ch
         # presently we don't have functionality for combined model
         pass
     else:
-        print '[Info] collecting RUL predictions on test data for specified engines...'
+        print('[Info] collecting RUL predictions on test data for specified engines...')
         # make RUL prediction for each engine separately
         prediction, real = [], []
         for engine in engines_to_check:

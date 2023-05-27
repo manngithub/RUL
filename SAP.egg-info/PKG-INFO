@@ -1,0 +1,13 @@
+Metadata-Version: 2.1
+Name: SAP
+Version: 0.1
+Summary: Remaining Useful Life Estimation using LSTM Networks
+Maintainer: Manoj Kumar
+Maintainer-email: mann.dhiman@gmail.com
+Classifier: Intended Audience :: Science/Research
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development
+Classifier: Topic :: Scientific/Engineering
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX
+Classifier: Operating System :: Unix
